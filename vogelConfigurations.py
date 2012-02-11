@@ -13,7 +13,7 @@ AQUA = (0, 255, 255)
 SNOW = (238, 233, 233)
 SNOW2 = (205, 201, 201)
 
-FULLSCREEN = 0   #Bool   ###DOESN'T WORK CORRECTLY YET :(
+FULLSCREEN = 1   #Bool   
 WINDOW_HEIGHT = 500   # overridden by fullscreen bool
 WINDOW_WIDTH = 700   # overridden by fullscreen bool
 
@@ -39,6 +39,18 @@ FRAMES_PER_SECOND = 20
 WINDOW_CAPTION = "Vogel Task"
 BACKGROUND = SNOW2
 
-CROSS_WIDTH = .05   # ratio of fixation cross width and screen width
+CROSS_WIDTH = .008   # ratio of fixation cross width and screen width
 LINE_WIDTH = 2
 CROSS_COLOR = BLACK
+
+ARROW_X_OFFSET = 40
+ARROW_X_SPAN = 15
+ARROW_Y_OFFSET = 70
+ARROW_Y_SPAN = 5
+
+
+"""
+pygame.draw.line( screen, CROSS_COLOR, (0,0), (WINDOW_WIDTH,WINDOW_HEIGHT), 1 )
+pygame.draw.line( screen, CROSS_COLOR, (WINDOW_WIDTH,0), (0,WINDOW_HEIGHT), 1 )
+"""
+
