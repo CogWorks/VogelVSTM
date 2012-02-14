@@ -1,0 +1,8 @@
+
+
+
+2012-02-13	Tony Fischetti	tony.fischetti@gmail.com
+
+* first changlog
+
+* everything until now (no changes to report here) [see git changes]
