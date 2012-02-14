@@ -1,5 +1,10 @@
 
 
+2012-02-13	Tony Fischetti	tony.fischetti@gmail.com
+
+* almost done (see TODO for missing functionality)
+
+
 
 2012-02-13	Tony Fischetti	tony.fischetti@gmail.com
 
