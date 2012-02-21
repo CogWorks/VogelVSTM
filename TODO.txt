@@ -4,6 +4,4 @@
 
 * difficulty coefficient
 
-* streamline code
-
 * identify bottlenecks and longest function calls

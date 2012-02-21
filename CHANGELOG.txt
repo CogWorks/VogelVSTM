@@ -1,4 +1,15 @@
 
+2012-02-21	Tony Fischetti	tony.fischetti@gmail.com
+
+* streamlined code to conform to PEP-8 standards (mostly)
+
+* all lines are less than 100 characters
+
+* import configuration *as* cnf so as to not pollute namespace
+
+* prepended all configuration variables with "cnf."
+
+
 
 2012-02-13	Tony Fischetti	tony.fischetti@gmail.com
 

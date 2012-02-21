@@ -52,16 +52,14 @@ CROSS_WIDTH = .008   # ratio of fixation cross width and screen width
 LINE_WIDTH = 2
 CROSS_COLOR = BLACK
 
+"""
 ARROW_X_OFFSET = 40
 ARROW_X_SPAN = 15
 ARROW_Y_OFFSET = 70
 ARROW_Y_SPAN = 5
+"""
 
 CROSS_DISAPPEARS_ON_ARROW = False
 
 
-"""
-pygame.draw.line( screen, CROSS_COLOR, (0,0), (WINDOW_WIDTH,WINDOW_HEIGHT), 1 )
-pygame.draw.line( screen, CROSS_COLOR, (WINDOW_WIDTH,0), (0,WINDOW_HEIGHT), 1 )
-"""
 
