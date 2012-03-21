@@ -1,0 +1,5 @@
+
+
+240 trials
+use rectangles
+use visual angle as opposed to pixels

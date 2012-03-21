@@ -1,3 +1,14 @@
+2012-03-21        Tony Fischetti    tony.fischetti@gmail.com
+
+* conform to Vogel's 2004 one-color modification for different test array
+
+* more conformity with PEP-8 standards
+
+
+2012-02-22  Tony Fischetti  tony.fischetti@gmail.com
+
+* not much to report
+
 
 2012-02-21	Tony Fischetti	tony.fischetti@gmail.com
 
