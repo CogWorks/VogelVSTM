@@ -1,11 +1,6 @@
 
-
-* logging
-
-* collision detection 
-
-* limit number of trials
-
-* identify bottlenecks and longest function calls
+* identify bottlenecks and longest function calls (streamline)
 
 * support for Python3 grammar
+
+* button box support

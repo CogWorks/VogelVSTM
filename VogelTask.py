@@ -5,13 +5,13 @@
 
 import sys
 import random
+import time
 import pygame
 import vogelConfigurations as cnf
 
 
 def main():
-
-    ### pick random color
+    ### pick random color ###
     def pick_random_color(notthis="none"):
         allavailable = [cnf.BLACK, cnf.WHITE, cnf.RED, cnf.GREEN, 
                         cnf.BLUE, cnf.YELLOW, cnf.PURPLE]
@@ -27,50 +27,86 @@ def main():
                 else:
                     listofnowavailablecolors.append(thecolor)
             color = random.sample(listofnowavailablecolors, 1)[0]
-        return color       
+        return color
+    
+    ### collision detection ###
+    def does_collide(pot_coord, restricted_coords):
+        padding = cnf.BLOCK_SIZE * cnf.WINDOW_WIDTH + 5
+        for item in restricted_coords:
+            if (item[0] - padding) <= pot_coord[0] <= (item[0] + padding):
+                if (item[1]-padding) <= pot_coord[1] <= (item[1] + padding):
+                    return True
+        return False
+    
+    ### random coordinates for left ###
+    def random_coordinates_left():
+        real_block_size = cnf.BLOCK_SIZE * cnf.WINDOW_WIDTH
+        x_start = random.randrange(cnf.LEFT_MARGIN, 
+                                   cnf.CENTRE_COORDINATE_X - 
+                                   cnf.CENTRE_MARGIN - real_block_size)
+        y_start = random.randrange(cnf.TOP_MARGIN, 
+                                   cnf.WINDOW_HEIGHT - 
+                                   cnf.BOTTOM_MARGIN - real_block_size)
+        return x_start, y_start
+
+    ### random coordinates for rightt ###
+    def random_coordinates_right():
+        real_block_size = cnf.BLOCK_SIZE * cnf.WINDOW_WIDTH
+        x_start = random.randrange(cnf.CENTRE_COORDINATE_X + 
+                                   cnf.CENTRE_MARGIN, 
+                                   cnf.WINDOW_WIDTH - cnf.RIGHT_MARGIN - 
+                                   real_block_size)
+        y_start = random.randrange(cnf.TOP_MARGIN, 
+                                   cnf.WINDOW_HEIGHT - cnf.BOTTOM_MARGIN - 
+                                   real_block_size)
+        return x_start, y_start
     
     ### draw fixation cross ###
     def draw_cross():
-        pygame.draw.line( screen, cnf.CROSS_COLOR, (cnf.CENTRE_COORDINATE_X, 
-                                                    cnf.CENTRE_COORDINATE_Y - cnf.CROSS_WIDTH * 
-                                                    cnf.WINDOW_WIDTH), 
-                                                   (cnf.CENTRE_COORDINATE_X,
-                                                    cnf.CENTRE_COORDINATE_Y + 
-                                                    cnf.CROSS_WIDTH * cnf.WINDOW_WIDTH), 
-                                                    cnf.LINE_WIDTH)
-        pygame.draw.line( screen, cnf.CROSS_COLOR, (cnf.CENTRE_COORDINATE_X-cnf.CROSS_WIDTH * 
-                                                    cnf.WINDOW_WIDTH, cnf.CENTRE_COORDINATE_Y), 
-                                                   (cnf.CENTRE_COORDINATE_X--cnf.CROSS_WIDTH*
-                                                    cnf.WINDOW_WIDTH, cnf.CENTRE_COORDINATE_Y), 
-                                                    cnf.LINE_WIDTH )
+        pygame.draw.line( screen, cnf.CROSS_COLOR, 
+                                 (cnf.CENTRE_COORDINATE_X, 
+                                  cnf.CENTRE_COORDINATE_Y - cnf.CROSS_WIDTH * 
+                                  cnf.WINDOW_WIDTH), 
+                                 (cnf.CENTRE_COORDINATE_X,
+                                  cnf.CENTRE_COORDINATE_Y + 
+                                  cnf.CROSS_WIDTH * cnf.WINDOW_WIDTH), 
+                                  cnf.LINE_WIDTH)
+        pygame.draw.line( screen, cnf.CROSS_COLOR, 
+                                  (cnf.CENTRE_COORDINATE_X - cnf.CROSS_WIDTH * 
+                                   cnf.WINDOW_WIDTH, cnf.CENTRE_COORDINATE_Y), 
+                                  (cnf.CENTRE_COORDINATE_X + cnf.CROSS_WIDTH *
+                                   cnf.WINDOW_WIDTH, cnf.CENTRE_COORDINATE_Y), 
+                                   cnf.LINE_WIDTH )
         pygame.display.flip()
 
     ### draw arrows ###
     def draw_arrow( direction ):
         if direction == "left":
-            pygame.draw.polygon( screen, cnf.CROSS_COLOR, [ (cnf.CENTRE_COORDINATE_X - 40,
-                                                             cnf.CENTRE_COORDINATE_Y - 70),
-                                                            (cnf.CENTRE_COORDINATE_X - 40 + 15,
-                                                             cnf.CENTRE_COORDINATE_Y - 70 + 5),
-                                                            (cnf.CENTRE_COORDINATE_X - 40 + 15,
-                                                             cnf.CENTRE_COORDINATE_Y - 70 - 5)], 
-                                                              0 )  
-            pygame.draw.line( screen, cnf.CROSS_COLOR, (cnf.CENTRE_COORDINATE_X-40, 
-                                                         cnf.CENTRE_COORDINATE_Y-70),
-                                                       (cnf.CENTRE_COORDINATE_X+40, 
-                                                         cnf.CENTRE_COORDINATE_Y-70), 1)
+            pygame.draw.polygon( screen, cnf.CROSS_COLOR, 
+                                      [ (cnf.CENTRE_COORDINATE_X - 40,
+                                         cnf.CENTRE_COORDINATE_Y - 70),
+                                        (cnf.CENTRE_COORDINATE_X - 40 + 15,
+                                         cnf.CENTRE_COORDINATE_Y - 70 + 5),
+                                        (cnf.CENTRE_COORDINATE_X - 40 + 15,
+                                         cnf.CENTRE_COORDINATE_Y - 70 - 5)], 0)  
+            pygame.draw.line( screen, cnf.CROSS_COLOR, 
+                                     (cnf.CENTRE_COORDINATE_X - 40, 
+                                      cnf.CENTRE_COORDINATE_Y - 70),
+                                     (cnf.CENTRE_COORDINATE_X + 40, 
+                                      cnf.CENTRE_COORDINATE_Y - 70), 1)
         if direction == "right":
-            pygame.draw.polygon(screen, cnf.CROSS_COLOR, [ (cnf.CENTRE_COORDINATE_X + 40,
-                                                             cnf.CENTRE_COORDINATE_Y-70),
-                                                            (cnf.CENTRE_COORDINATE_X + 40 - 15,
-                                                             cnf.CENTRE_COORDINATE_Y - 70 + 5),
-                                                            (cnf.CENTRE_COORDINATE_X + 40 - 15,
-                                                             cnf.CENTRE_COORDINATE_Y - 70 - 5)],
-                                                              0)  
-            pygame.draw.line(screen, cnf.CROSS_COLOR, (cnf.CENTRE_COORDINATE_X-40, 
-                                                       cnf.CENTRE_COORDINATE_Y-70),
-                                                      (cnf.CENTRE_COORDINATE_X+40, 
-                                                       cnf.CENTRE_COORDINATE_Y-70), 1)
+            pygame.draw.polygon(screen, cnf.CROSS_COLOR, 
+                                     [ (cnf.CENTRE_COORDINATE_X + 40,
+                                        cnf.CENTRE_COORDINATE_Y - 70),
+                                       (cnf.CENTRE_COORDINATE_X + 40 - 15,
+                                        cnf.CENTRE_COORDINATE_Y - 70 + 5),
+                                        (cnf.CENTRE_COORDINATE_X + 40 - 15,
+                                        cnf.CENTRE_COORDINATE_Y - 70 - 5)], 0)  
+            pygame.draw.line(screen, cnf.CROSS_COLOR, 
+                                    (cnf.CENTRE_COORDINATE_X - 40, 
+                                     cnf.CENTRE_COORDINATE_Y - 70),
+                                    (cnf.CENTRE_COORDINATE_X + 40, 
+                                     cnf.CENTRE_COORDINATE_Y - 70), 1)
         pygame.display.flip()
         pygame.time.wait(cnf.ARROW_FLASH_TIME)
         clear()
@@ -79,55 +115,57 @@ def main():
     
     ### draw blocks ###
     def draw_blocks( direction, same_or_different_flag ):
-    
         real_block_size = cnf.BLOCK_SIZE * cnf.WINDOW_WIDTH
         blocksetleft = []
         blocksetright = []
-
+        restricted_coords_left = []
+        restricted_coords_right = []
         for position in range(cnf.NUMBER_OF_BLOCKS):
             #blocksetleft
-            x_start = random.randrange(cnf.LEFT_MARGIN, 
-                                       cnf.CENTRE_COORDINATE_X-cnf.CENTRE_MARGIN-real_block_size)
-            y_start = random.randrange(cnf.TOP_MARGIN, 
-                                       cnf.WINDOW_HEIGHT-cnf.BOTTOM_MARGIN-real_block_size)
+            x_start, y_start = random_coordinates_left()
+            if does_collide((x_start,y_start), restricted_coords_left):
+                x_start, y_start = random_coordinates_left()
+                if does_collide((x_start,y_start), restricted_coords_left):
+                    x_start, y_start = random_coordinates_left()
+                    if does_collide((x_start,y_start), restricted_coords_left):
+                        x_start, y_start = random_coordinates_left()
+            restricted_coords_left.append((x_start,y_start))
             x_end = x_start + real_block_size
             y_end = y_start + real_block_size
             color = pick_random_color()
             blocksetleft.append(([ (x_start,y_start), (x_start,y_end), 
-                                   (x_end,y_end), (x_end,y_start) ], color ))
+                                   (x_end,y_end), (x_end,y_start) ], color))
             #blocksetright
-            x_start = random.randrange(cnf.CENTRE_COORDINATE_X + cnf.CENTRE_MARGIN, 
-                                       cnf.WINDOW_WIDTH - cnf.RIGHT_MARGIN - real_block_size)
-            y_start = random.randrange(cnf.TOP_MARGIN, 
-                                       cnf.WINDOW_HEIGHT - cnf.BOTTOM_MARGIN - real_block_size)
+            x_start, y_start = random_coordinates_right()
+            if does_collide((x_start,y_start), restricted_coords_right):
+                x_start, y_start = random_coordinates_right()
+                if does_collide((x_start,y_start), restricted_coords_right):
+                    x_start, y_start = random_coordinates_right()
+                    if does_collide((x_start,y_start), restricted_coords_right):
+                        x_start, y_start = random_coordinates_right()
+            restricted_coords_right.append((x_start,y_start))
             x_end = x_start + real_block_size
             y_end = y_start + real_block_size
             color = pick_random_color()
             blocksetright.append(([ (x_start,y_start), (x_start,y_end), 
-                                      (x_end,y_end), (x_end,y_start) ], color ))
-        
+                                      (x_end,y_end), (x_end,y_start) ], color))
         #draw the blocks for the first flash
         for block, color in blocksetleft:
             pygame.draw.polygon(screen, color, block, 0)
         for block, color in blocksetright:
             pygame.draw.polygon(screen, color, block, 0)
         pygame.display.flip()            
-        
         pygame.time.wait(cnf.STIMULUS_FLASH_TIME1)
         clear()
-        
         if not cnf.CROSS_DISAPPEARS_ON_ARROW:
             draw_cross() 
-         
         pygame.time.wait(cnf.WAIT4)
-        
         #if the test (2nd) array is supposed to be the same
         if same_or_different_flag == "same":
             for block, color in blocksetleft:
                 pygame.draw.polygon(screen, color, block, 0)
             for block, color in blocksetright:
                 pygame.draw.polygon(screen, color, block, 0)
-        
         #if the test (2nd) array is supposed to be different, carry on
         if same_or_different_flag == "different":
             change_index = random.randrange(0, cnf.NUMBER_OF_BLOCKS-1, 1)
@@ -152,7 +190,6 @@ def main():
                     else:
                         pygame.draw.polygon(screen, color, block, 0)
                     index += 1
-                  
         pygame.display.flip()
         pygame.time.wait(cnf.STIMULUS_FLASH_TIME2)
         clear()
@@ -177,7 +214,8 @@ def main():
     def same_or_different():
         font = pygame.font.Font(None, 70)
         text = font.render("Same or different ('a' or 'l')", 1, cnf.BLACK)
-        screen.blit( text, (cnf.CENTRE_COORDINATE_X-300, cnf.CENTRE_COORDINATE_Y-200) )
+        screen.blit(text, (cnf.CENTRE_COORDINATE_X-300, 
+                           cnf.CENTRE_COORDINATE_Y-200))
         pygame.display.update()
         while True:
             event = pygame.event.wait()
@@ -192,11 +230,13 @@ def main():
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 sys.exit(0)     
 
-    ### tell the subject to press SPACE to continue, before experiment starts ###     
+    # tell the subject to press SPACE to continue, before experiment starts #     
     def space_to_continue():
         font = pygame.font.Font(None, 70)
-        text = font.render("Press SPACE to continue or ESCAPE to exit", 1, cnf.BLACK)
-        screen.blit(text, (cnf.CENTRE_COORDINATE_X-500, cnf.CENTRE_COORDINATE_Y-200))
+        text = font.render("Press SPACE to continue or ESCAPE to exit", 1, 
+                            cnf.BLACK)
+        screen.blit(text, (cnf.CENTRE_COORDINATE_X-500, 
+                           cnf.CENTRE_COORDINATE_Y-200))
         pygame.display.update()
         while True:
             event = pygame.event.wait()
@@ -210,11 +250,16 @@ def main():
     
     ### pygame goings-on ###
     pygame.init()
+    logfile = open(cnf.logfile, "a")
+    headers = "trial_number,leftorright,sameordiff,"
+    headers += "subjanswer,correct,trialtime,cumulative_time\n"
+    logfile.write(headers)
     if cnf.FULLSCREEN:
         possible_sizes = pygame.display.list_modes(0, pygame.FULLSCREEN)
         cnf.WINDOW_WIDTH = possible_sizes[0][0]
         cnf.WINDOW_HEIGHT = possible_sizes[0][1]
-        screen = pygame.display.set_mode((cnf.WINDOW_WIDTH,cnf.WINDOW_HEIGHT),pygame.FULLSCREEN)
+        screen = pygame.display.set_mode((cnf.WINDOW_WIDTH,cnf.WINDOW_HEIGHT),
+                                          pygame.FULLSCREEN)
     else:
         screen = pygame.display.set_mode((cnf.WINDOW_WIDTH, cnf.WINDOW_HEIGHT))
     cnf.CENTRE_COORDINATE_X = cnf.WINDOW_WIDTH / 2
@@ -224,11 +269,13 @@ def main():
     screen.fill(cnf.BACKGROUND)
     pygame.mouse.set_visible(False)
     space_to_continue()
+    start_time = time.time()
+    previous_time = start_time
+    trial_number = 0
     
     ### MainLoop ###
     while True:
         handle_events()
-        #add hooks to handle events?
         s_or_d = random.sample(("same", "different"), 1)[0]
         l_or_r = random.sample(("left", "right"), 1)[0]
         draw_cross()
@@ -239,12 +286,29 @@ def main():
         pygame.time.wait(cnf.WAIT3)
         draw_blocks(l_or_r, s_or_d)
         pygame.time.wait(cnf.WAIT5)
-        answer = same_or_different()  
-        if answer == s_or_d:
-            print "Correct"
+        trial_number += 1
+        answer = same_or_different()
+        cumulative_time = time.time() - start_time
+        if trial_number == 1:
+            this_trial_time = cumulative_time
         else:
-            print "Incorrect"
+            this_trial_time = cumulative_time - previous_time
+        previous_time = cumulative_time
+        if answer == s_or_d:
+            isCorrect = "Correct"
+        else:
+            isCorrect = "Incorrect"
+        logline = ",".join([ str(trial_number), 
+                                 l_or_r, 
+                                 s_or_d, 
+                             str(answer), 
+                                 isCorrect,
+                             str(this_trial_time), 
+                             str(cumulative_time)])
+        logline += "\n"
+        logfile.write(logline)
         pygame.display.flip()
+    logfile.close()
     pygame.quit()
 
 if __name__ == "__main__":

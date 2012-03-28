@@ -1,3 +1,15 @@
+2012-03-28       Tony Fischetti    tony.fischetti@gmail.com
+
+* 100% conformity with PEP-8 standards
+
+* logging
+
+* number of trials limit
+
+* collision detection (finally)
+
+
+
 2012-03-21        Tony Fischetti    tony.fischetti@gmail.com
 
 * conform to Vogel's 2004 one-color modification for different test array
