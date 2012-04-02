@@ -1,8 +1,5 @@
 #!/usr/bin/env python -tt
 
-#check this change
-
-
 import sys
 import random
 import time
@@ -231,11 +228,10 @@ def main():
                 sys.exit(0)     
 
     # tell the subject to press SPACE to continue, before experiment starts #     
-    def space_to_continue():
+    def space_to_continue(message="Press SPACE to continue or ESCAPE to exit"):
         font = pygame.font.Font(None, 70)
-        text = font.render("Press SPACE to continue or ESCAPE to exit", 1, 
-                            cnf.BLACK)
-        screen.blit(text, (cnf.CENTRE_COORDINATE_X-500, 
+        text = font.render(message, 1, cnf.BLACK)
+        screen.blit(text, (cnf.CENTRE_COORDINATE_X-500,  
                            cnf.CENTRE_COORDINATE_Y-200))
         pygame.display.update()
         while True:
@@ -252,7 +248,7 @@ def main():
     pygame.init()
     logfile = open(cnf.logfile, "a")
     headers = "trial_number,leftorright,sameordiff,"
-    headers += "subjanswer,correct,trialtime,cumulative_time\n"
+    headers += "subjanswer,correct?,trialtime,cumulative_time\n"
     logfile.write(headers)
     if cnf.FULLSCREEN:
         possible_sizes = pygame.display.list_modes(0, pygame.FULLSCREEN)
@@ -275,6 +271,8 @@ def main():
     
     ### MainLoop ###
     while True:
+        if trial_number >= cnf.NUM_OF_TRIALS:
+            space_to_continue("Thank you for your participation!")    
         handle_events()
         s_or_d = random.sample(("same", "different"), 1)[0]
         l_or_r = random.sample(("left", "right"), 1)[0]
@@ -298,12 +296,8 @@ def main():
             isCorrect = "Correct"
         else:
             isCorrect = "Incorrect"
-        logline = ",".join([ str(trial_number), 
-                                 l_or_r, 
-                                 s_or_d, 
-                             str(answer), 
-                                 isCorrect,
-                             str(this_trial_time), 
+        logline = ",".join([ str(trial_number), l_or_r, s_or_d, str(answer), 
+                             isCorrect, str(this_trial_time), 
                              str(cumulative_time)])
         logline += "\n"
         logfile.write(logline)

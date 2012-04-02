@@ -46,6 +46,6 @@ CROSS_COLOR = BLACK
 CROSS_DISAPPEARS_ON_ARROW = False
 
 logfile = "runninglog.csv"
-NUM_OF_TRIALS = 100
+NUM_OF_TRIALS = 240
 
 

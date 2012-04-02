@@ -1,3 +1,9 @@
+2012-04-02       Tony Fischetti    tony.fischetti@gmail.com
+
+* Finished, ready for use
+
+
+
 2012-03-28       Tony Fischetti    tony.fischetti@gmail.com
 
 * 100% conformity with PEP-8 standards

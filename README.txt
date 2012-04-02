@@ -7,7 +7,6 @@
 *                                                                       *
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-(more coming)
 
 requires pygame module
 
