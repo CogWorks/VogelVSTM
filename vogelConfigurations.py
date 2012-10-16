@@ -1,5 +1,6 @@
 #!/usr/bin/env python -tt
 
+import pycogworks
 
 #colors
 BLACK = (0, 0, 0)
@@ -45,7 +46,9 @@ LINE_WIDTH = 2
 CROSS_COLOR = BLACK
 CROSS_DISAPPEARS_ON_ARROW = False
 
-logfile = "runninglog.csv"
+logfilename = str("VOGEL " + pycogworks.getDateTimeStamp() + ".csv")
+historyfilename = str("VOGEL " + pycogworks.getDateTimeStamp() + ".history")
+
 NUM_OF_TRIALS = 240
 
 

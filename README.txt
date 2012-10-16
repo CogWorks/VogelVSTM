@@ -9,6 +9,7 @@
 
 
 requires pygame module
+requires pycogworks module (you can pip install it)
 
 run ./VogelTask.py or (python -tt ./VogelTask.py)
 

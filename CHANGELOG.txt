@@ -1,3 +1,20 @@
+2012-10-16       Tony Fischetti    tony.fischetti@gmail.com
+
+* Now requires pycogworks (which requires PySide and PyCrypto)
+
+* uses pycogworks' get time instead of standard Python's
+
+* changed default log file name to include date/time stamp from pycogworks
+
+* gets subject info from pycogworks interface
+
+* writes "history file" that the lab apparently needs
+
+* more robust logging 
+    (experiment can be replicated frame by frame from logfile)
+
+
+
 2012-04-02       Tony Fischetti    tony.fischetti@gmail.com
 
 * Finished, ready for use

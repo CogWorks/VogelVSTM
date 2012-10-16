@@ -1,9 +1,31 @@
 #!/usr/bin/env python -tt
 
+###########################################################
+##                                                       ##
+##   VogelTask.py   VogelVSTM.bbprojectd                 ##
+##                                                       ##
+##                Author: Tony Fischetti                 ##
+##                        tony.fischetti                 ##
+##                                                       ##
+###########################################################
+
+"""
+More or less a clone of (Vogel et al., 2004) visual
+short term memory task.
+
+Uses Python 2.7 grammar
+requires pygame module
+requires pycogworks module (which requires PySide and PyCrypto)
+"""
+
+__author__ = 'Tony Fischetti'
+__version__ = '1.1'
+
 import sys
 import random
 import time
 import pygame
+import pycogworks
 import vogelConfigurations as cnf
 
 
@@ -112,6 +134,7 @@ def main():
     
     ### draw blocks ###
     def draw_blocks( direction, same_or_different_flag ):
+        ret_list = []
         real_block_size = cnf.BLOCK_SIZE * cnf.WINDOW_WIDTH
         blocksetleft = []
         blocksetright = []
@@ -151,6 +174,8 @@ def main():
             pygame.draw.polygon(screen, color, block, 0)
         for block, color in blocksetright:
             pygame.draw.polygon(screen, color, block, 0)
+        ret_list.append(blocksetleft)
+        ret_list.append(blocksetright)
         pygame.display.flip()            
         pygame.time.wait(cnf.STIMULUS_FLASH_TIME1)
         clear()
@@ -159,6 +184,9 @@ def main():
         pygame.time.wait(cnf.WAIT4)
         #if the test (2nd) array is supposed to be the same
         if same_or_different_flag == "same":
+            ret_list.append("NA")
+            ret_list.append("NA")
+            ret_list.append("NA")
             for block, color in blocksetleft:
                 pygame.draw.polygon(screen, color, block, 0)
             for block, color in blocksetright:
@@ -166,11 +194,14 @@ def main():
         #if the test (2nd) array is supposed to be different, carry on
         if same_or_different_flag == "different":
             change_index = random.randrange(0, cnf.NUMBER_OF_BLOCKS-1, 1)
+            ret_list.append(change_index)
             index = 0
             if direction == "left":
                 for block, color in blocksetleft:
                     if index == change_index:
                         newcolor = pick_random_color(color)
+                        ret_list.append(color)
+                        ret_list.append(newcolor)
                         pygame.draw.polygon(screen, newcolor, block, 0)
                     else:
                         pygame.draw.polygon(screen, color, block, 0)
@@ -183,6 +214,8 @@ def main():
                 for block, color in blocksetright:
                     if index == change_index:
                         newcolor = pick_random_color(color)
+                        ret_list.append(color)
+                        ret_list.append(newcolor)
                         pygame.draw.polygon(screen, newcolor, block, 0)
                     else:
                         pygame.draw.polygon(screen, color, block, 0)
@@ -191,7 +224,8 @@ def main():
         pygame.time.wait(cnf.STIMULUS_FLASH_TIME2)
         clear()
         if not cnf.CROSS_DISAPPEARS_ON_ARROW:
-            draw_cross()        
+            draw_cross()       
+        return ret_list
     #############################
     
     ### handle game events ###
@@ -244,11 +278,14 @@ def main():
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 sys.exit(0)     
     
+    user_dict = pycogworks.getSubjectInfo()
+    pycogworks.writeHistoryFile(cnf.historyfilename, {"rin": user_dict["rin"]})
     ### pygame goings-on ###
     pygame.init()
-    logfile = open(cnf.logfile, "a")
+    logfile = open(cnf.logfilename, "a")
     headers = "trial_number,leftorright,sameordiff,"
-    headers += "subjanswer,correct?,trialtime,cumulative_time\n"
+    headers += "subjanswer,correct?,trialtime,cumulative_time,"
+    headers += "leftblocks,rightblocks,blockchanged,oldcolor,newcolor\n"
     logfile.write(headers)
     if cnf.FULLSCREEN:
         possible_sizes = pygame.display.list_modes(0, pygame.FULLSCREEN)
@@ -282,11 +319,11 @@ def main():
         pygame.time.wait(cnf.WAIT2)
         draw_arrow(l_or_r)
         pygame.time.wait(cnf.WAIT3)
-        draw_blocks(l_or_r, s_or_d)
+        draw_info = draw_blocks(l_or_r, s_or_d)
         pygame.time.wait(cnf.WAIT5)
         trial_number += 1
         answer = same_or_different()
-        cumulative_time = time.time() - start_time
+        cumulative_time = pycogworks.get_time() - start_time
         if trial_number == 1:
             this_trial_time = cumulative_time
         else:
@@ -298,7 +335,12 @@ def main():
             isCorrect = "Incorrect"
         logline = ",".join([ str(trial_number), l_or_r, s_or_d, str(answer), 
                              isCorrect, str(this_trial_time), 
-                             str(cumulative_time)])
+                             str(cumulative_time), 
+                             str(draw_info[0]).replace(",", ":"),
+                             str(draw_info[1]).replace(",", ":"), 
+                             str(draw_info[2]),
+                             str(draw_info[3]).replace(",", ":"), 
+                             str(draw_info[4]).replace(",", ":")])
         logline += "\n"
         logfile.write(logline)
         pygame.display.flip()
